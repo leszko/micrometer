@@ -36,11 +36,11 @@ class HazelcastAdapter {
     static class IMap<K, V> {
         Object cache;
 
-        public IMap(Object cache) {
+        IMap(Object cache) {
             this.cache = cache;
         }
 
-        public LocalMapStats getLocalMapStats() {
+        LocalMapStats getLocalMapStats() {
             try {
                 return new LocalMapStats(iMapClass().getMethod("getLocalMapStats").invoke(cache));
             } catch (Exception e) {
@@ -52,11 +52,11 @@ class HazelcastAdapter {
     static class LocalMapStats {
         Object localMapStats;
 
-        public LocalMapStats(Object localMapStats) {
+        LocalMapStats(Object localMapStats) {
             this.localMapStats = localMapStats;
         }
 
-        public long getOwnedEntryCount() {
+        long getOwnedEntryCount() {
             try {
                 return (long) localMapStatsClass().getMethod("getOwnedEntryCount").invoke(localMapStats);
             } catch (Exception e) {
@@ -64,7 +64,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getHits() {
+        long getHits() {
             try {
                 return (long) localMapStatsClass().getMethod("getHits").invoke(localMapStats);
             } catch (Exception e) {
@@ -72,7 +72,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getPutOperationCount() {
+        long getPutOperationCount() {
             try {
                 return (long) localMapStatsClass().getMethod("getPutOperationCount").invoke(localMapStats);
             } catch (Exception e) {
@@ -80,7 +80,7 @@ class HazelcastAdapter {
             }
         }
 
-        public double getBackupEntryCount() {
+        double getBackupEntryCount() {
             try {
                 return (long) localMapStatsClass().getMethod("getBackupEntryCount").invoke(localMapStats);
             } catch (Exception e) {
@@ -88,7 +88,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getBackupEntryMemoryCost() {
+        long getBackupEntryMemoryCost() {
             try {
                 return (long) localMapStatsClass().getMethod("getBackupEntryMemoryCost").invoke(localMapStats);
             } catch (Exception e) {
@@ -96,7 +96,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getOwnedEntryMemoryCost() {
+        long getOwnedEntryMemoryCost() {
             try {
                 return (long) localMapStatsClass().getMethod("getOwnedEntryMemoryCost").invoke(localMapStats);
             } catch (Exception e) {
@@ -104,7 +104,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getGetOperationCount() {
+        long getGetOperationCount() {
             try {
                 return (Long) localMapStatsClass().getMethod("getGetOperationCount").invoke(localMapStats);
             } catch (Exception e) {
@@ -112,15 +112,15 @@ class HazelcastAdapter {
             }
         }
 
-        public NearCacheStats getNearCacheStats() {
+        NearCacheStats getNearCacheStats() {
             try {
-                return (NearCacheStats) localMapStatsClass().getMethod("getNearCacheStats").invoke(localMapStats);
+                return new NearCacheStats(localMapStatsClass().getMethod("getNearCacheStats").invoke(localMapStats));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public long getTotalGetLatency() {
+        long getTotalGetLatency() {
             try {
                 return (long) localMapStatsClass().getMethod("getTotalGetLatency").invoke(localMapStats);
             } catch (Exception e) {
@@ -128,7 +128,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getTotalPutLatency() {
+        long getTotalPutLatency() {
             try {
                 return (long) localMapStatsClass().getMethod("getTotalPutLatency").invoke(localMapStats);
             } catch (Exception e) {
@@ -136,7 +136,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getRemoveOperationCount() {
+        long getRemoveOperationCount() {
             try {
                 return (Long) localMapStatsClass().getMethod("getRemoveOperationCount").invoke(localMapStats);
             } catch (Exception e) {
@@ -144,7 +144,7 @@ class HazelcastAdapter {
             }
         }
 
-        public long getTotalRemoveLatency() {
+        long getTotalRemoveLatency() {
             try {
                 return (long) localMapStatsClass().getMethod("getTotalRemoveLatency").invoke(localMapStats);
             } catch (Exception e) {
@@ -160,7 +160,7 @@ class HazelcastAdapter {
             this.nearCacheStats = nearCacheStats;
         }
 
-        public double getHits() {
+        long getHits() {
             try {
                 return (long) nearCacheStatsClass().getMethod("getHits").invoke(nearCacheStats);
             } catch (Exception e) {
@@ -168,7 +168,7 @@ class HazelcastAdapter {
             }
         }
 
-        public double getMisses() {
+        long getMisses() {
             try {
                 return (long) nearCacheStatsClass().getMethod("getMisses").invoke(nearCacheStats);
             } catch (Exception e) {
@@ -176,7 +176,7 @@ class HazelcastAdapter {
             }
         }
 
-        public double getEvictions() {
+        long getEvictions() {
             try {
                 return (long) nearCacheStatsClass().getMethod("getEvictions").invoke(nearCacheStats);
             } catch (Exception e) {
@@ -184,7 +184,7 @@ class HazelcastAdapter {
             }
         }
 
-        public double getPersistenceCount() {
+        long getPersistenceCount() {
             try {
                 return (long) nearCacheStatsClass().getMethod("getPersistenceCount").invoke(nearCacheStats);
             } catch (Exception e) {

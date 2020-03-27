@@ -139,7 +139,8 @@ public class HazelcastCacheMetrics extends CacheMeterBinder {
 
     private void nearCacheMetrics(MeterRegistry registry) {
         if (cache.getLocalMapStats().getNearCacheStats() != null) {
-            Gauge.builder("cache.near.requests", cache, cache -> cache.getLocalMapStats().getNearCacheStats().getHits())
+            Gauge.builder("cache.near.requests", cache,
+                    cache -> new HazelcastAdapter.NearCacheStats(cache.getLocalMapStats().getNearCacheStats()).getHits())
                     .tags(getTagsWithCacheName()).tag("result", "hit")
                     .description("The number of hits (reads) of near cache entries owned by this member")
                     .register(registry);
