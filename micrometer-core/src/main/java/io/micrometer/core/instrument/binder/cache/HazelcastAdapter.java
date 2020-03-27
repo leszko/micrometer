@@ -1,84 +1,195 @@
 package io.micrometer.core.instrument.binder.cache;
 
-import com.hazelcast.monitor.NearCacheStats;
-
 class HazelcastAdapter {
     static String nameOf(Object cache) {
-        if (cache instanceof com.hazelcast.core.IMap) {
-            return ((com.hazelcast.core.IMap) cache).getName();
+        try {
+            return (String) iMapClass().getMethod("getName").invoke(cache);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    private static Class iMapClass() throws ClassNotFoundException {
+        try {
+            return Class.forName("com.hazelcast.map.IMap");
+        } catch (ClassNotFoundException e) {
+            return Class.forName("com.hazelcast.core.IMap");
+        }
+    }
+
+    private static Class localMapStatsClass() throws ClassNotFoundException {
+        try {
+            return Class.forName("com.hazelcast.map.LocalMapStats");
+        } catch (ClassNotFoundException e) {
+            return Class.forName("com.hazelcast.monitor.LocalMapStats");
+        }
+    }
+
+    private static Class nearCacheStatsClass() throws ClassNotFoundException {
+        try {
+            return Class.forName("com.hazelcast.nearcache.NearCacheStats");
+        } catch (ClassNotFoundException e) {
+            return Class.forName("com.hazelcast.monitor.NearCacheStats");
+        }
     }
 
     static class IMap<K, V> {
-        com.hazelcast.core.IMap cache;
+        Object cache;
 
         public IMap(Object cache) {
-            if (cache instanceof com.hazelcast.core.IMap) {
-                this.cache = (com.hazelcast.core.IMap) cache;
-            }
+            this.cache = cache;
         }
 
         public LocalMapStats getLocalMapStats() {
-            return new LocalMapStats(cache.getLocalMapStats());
+            try {
+                return new LocalMapStats(iMapClass().getMethod("getLocalMapStats").invoke(cache));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     static class LocalMapStats {
-        com.hazelcast.monitor.LocalMapStats localMapStats;
+        Object localMapStats;
 
         public LocalMapStats(Object localMapStats) {
-            if (localMapStats instanceof com.hazelcast.monitor.LocalMapStats) {
-                this.localMapStats = (com.hazelcast.monitor.LocalMapStats) localMapStats;
+            this.localMapStats = localMapStats;
+        }
+
+        public long getOwnedEntryCount() {
+            try {
+                return (long) localMapStatsClass().getMethod("getOwnedEntryCount").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
-        public Long getOwnedEntryCount() {
-            return localMapStats.getOwnedEntryCount();
-        }
-
         public long getHits() {
-            return localMapStats.getHits();
+            try {
+                return (long) localMapStatsClass().getMethod("getHits").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public long getPutOperationCount() {
-            return localMapStats.getPutOperationCount();
+            try {
+                return (long) localMapStatsClass().getMethod("getPutOperationCount").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public double getBackupEntryCount() {
-            return localMapStats.getBackupEntryCount();
+            try {
+                return (long) localMapStatsClass().getMethod("getBackupEntryCount").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        public double getBackupEntryMemoryCost() {
-            return localMapStats.getBackupEntryMemoryCost();
+        public long getBackupEntryMemoryCost() {
+            try {
+                return (long) localMapStatsClass().getMethod("getBackupEntryMemoryCost").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        public double getOwnedEntryMemoryCost() {
-            return localMapStats.getOwnedEntryMemoryCost();
+        public long getOwnedEntryMemoryCost() {
+            try {
+                return (long) localMapStatsClass().getMethod("getOwnedEntryMemoryCost").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public long getGetOperationCount() {
-            return localMapStats.getGetOperationCount();
+            try {
+                return (Long) localMapStatsClass().getMethod("getGetOperationCount").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public NearCacheStats getNearCacheStats() {
-            return localMapStats.getNearCacheStats();
+            try {
+                return (NearCacheStats) localMapStatsClass().getMethod("getNearCacheStats").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        public double getTotalGetLatency() {
-            return localMapStats.getTotalGetLatency();
+        public long getTotalGetLatency() {
+            try {
+                return (long) localMapStatsClass().getMethod("getTotalGetLatency").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        public double getTotalPutLatency() {
-            return localMapStats.getTotalPutLatency();
+        public long getTotalPutLatency() {
+            try {
+                return (long) localMapStatsClass().getMethod("getTotalPutLatency").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public long getRemoveOperationCount() {
-            return localMapStats.getRemoveOperationCount();
+            try {
+                return (Long) localMapStatsClass().getMethod("getRemoveOperationCount").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        public double getTotalRemoveLatency() {
-            return localMapStats.getTotalRemoveLatency();
+        public long getTotalRemoveLatency() {
+            try {
+                return (long) localMapStatsClass().getMethod("getTotalRemoveLatency").invoke(localMapStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    static class NearCacheStats {
+        Object nearCacheStats;
+
+        NearCacheStats(Object nearCacheStats) {
+            this.nearCacheStats = nearCacheStats;
+        }
+
+        public double getHits() {
+            try {
+                return (long) nearCacheStatsClass().getMethod("getHits").invoke(nearCacheStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public double getMisses() {
+            try {
+                return (long) nearCacheStatsClass().getMethod("getMisses").invoke(nearCacheStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public double getEvictions() {
+            try {
+                return (long) nearCacheStatsClass().getMethod("getEvictions").invoke(nearCacheStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public double getPersistenceCount() {
+            try {
+                return (long) nearCacheStatsClass().getMethod("getPersistenceCount").invoke(nearCacheStats);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
