@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @NonNullApi
 @NonNullFields
 public class HazelcastCacheMetrics extends CacheMeterBinder {
-    private final HazelcastAdapter.IMap<?, ?> cache;
+    private final HazelcastIMapAdapter cache;
 
     /**
      * Record metrics on a Hazelcast cache.
@@ -65,8 +65,8 @@ public class HazelcastCacheMetrics extends CacheMeterBinder {
     }
 
     public <K, V, C> HazelcastCacheMetrics(C cache, Iterable<Tag> tags) {
-        super(cache, HazelcastAdapter.nameOf(cache), tags);
-        this.cache = new HazelcastAdapter.IMap<>(cache);
+        super(cache, HazelcastIMapAdapter.nameOf(cache), tags);
+        this.cache = new HazelcastIMapAdapter(cache);
     }
 
     @Override
